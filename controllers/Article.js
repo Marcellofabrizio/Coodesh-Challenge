@@ -1,8 +1,13 @@
 
-const { Article } = require('../models/Article.js')
+const Article = require('../models/Article.js');
 
-const getArticles = () => {
-
+async function getArticles(request, response) {
+    try {
+        const articles = await Article.find();
+        response.status(200).json(articles);
+    } catch (err) {
+        response.status(500).json({ error: err.message });
+    }
 }
 
 async function postArticle(request, response) {
@@ -19,7 +24,7 @@ async function postArticle(request, response) {
         events
     } = request.body
 
-    const article = {
+    const article = new Article({
         id,
         featured,
         title,
@@ -30,14 +35,14 @@ async function postArticle(request, response) {
         publishedAt,
         launches,
         events
-    }
+    })
 
     try {
-        await Article.create(article);
-        res.status(201).json({message: "Success"});
+        const newArticle = await article.save();
+        response.status(201).json(newArticle);
 
     } catch (err) {
-        response.status(500).json({ error: err });
+        response.status(500).json({ error: err.message });
     }
 }
 
