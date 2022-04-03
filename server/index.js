@@ -1,9 +1,11 @@
 const express = require('express');
 const mongoose = require('mongoose');
+const swaggerUi = require('swagger-ui-express');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+const swaggerDocument = require('../swagger.json');
 const articleRoutes = require('../routes/Article.js');
 
 mongoose.connect("mongodb+srv://MarcelloFabrizio:EspacialMongo@cluster0.gwwrw.mongodb.net/myFirstDatabase?retryWrites=true&w=majority",)
@@ -19,6 +21,8 @@ app.use(
 )
 
 app.use(express.json())
+
+app.use("/documentation", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 app.use(articleRoutes);
 

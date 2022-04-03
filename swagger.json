@@ -1,0 +1,113 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "version": "1.0.0",
+        "title": "Spaceflight News Articles API",
+        "description": "Coodesh Back-End Challenge 2021"
+    },
+    "host": "localhost:3000",
+    "basePath": "/",
+    "tags": [{
+        "name": "Articles",
+        "description": "API for the registered articles"
+    }],
+    "schemes": ["http"],
+    "consumes": ["application/json"],
+    "produces": ["application/json"],
+    "paths": {
+        "/articles": {
+            "get": {
+                "tags": ["Articles"],
+                "summary": "Get all articles",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/Article"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": ["Articles"],
+                "description": "Register a new Article",
+                "parameters": [{
+                    "name": "article",
+                    "in": "body",
+                    "description": "Article that we want to register",
+                    "schema": {
+                        "$ref": "#/definitions/Article"
+                    }
+                }],
+                "produces": ["application/json"],
+                "responses": {
+                    "200": {
+                        "description": "Article created",
+                        "schema": {
+                            "$ref": "#/definitions/Article"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "Article": {
+            "properties": {
+                "_id": {
+                    "type": "integer",
+                    "uniqueItems": true
+                },
+                "featured": {
+                    "type": "boolean"
+                },
+                "title": {
+                    "type": "string"
+                },
+                "url": {
+                    "type": "string"
+                },
+                "imageUrl": {
+                    "type": "string"
+                },
+                "newsSite": {
+                    "type": "string"
+                },
+                "summary": {
+                    "type": "string"
+                },
+                "publishedAt": {
+                    "type": "string"
+                },
+                "launches": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "id": {
+                                "type": "string"
+                            },
+                            "provider": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                },
+                "events": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "id": {
+                                "type": "string"
+                            },
+                            "provider": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
