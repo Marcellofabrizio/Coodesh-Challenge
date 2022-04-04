@@ -1,4 +1,5 @@
 const Article = require('../models/Article.js');
+const mongoose = require('mongoose');
 
 async function getArticles(request, response) {
 
@@ -79,13 +80,73 @@ async function postArticle(request, response) {
     })
 
     try {
+
+        await article.validate()
+
         const newArticle = await article.save();
         response.status(201).json(newArticle);
 
     } catch (err) {
-        response.status(500).json({
-            error: err.message
-        });
+        if (err instanceof mongoose.Error.ValidationError) {
+            response.status(400).json({
+                error: err.message
+            });
+        } else {
+            response.status(500).json({
+                error: err.message
+            });
+        }
+    }
+}
+
+async function putArticle(request, response) {
+
+    const {
+        _id,
+        featured,
+        title,
+        url,
+        imageUrl,
+        newsSite,
+        summary,
+        publishedAt,
+        launches,
+        events
+    } = request.body;
+
+    try {
+
+        const updatedArticle = new Article({
+            _id,
+            featured,
+            title,
+            url,
+            imageUrl,
+            newsSite,
+            summary,
+            publishedAt,
+            launches,
+            events
+        })
+
+        console.log(_id)
+
+        await updatedArticle.validate()
+
+        await Article.updateOne({ _id: _id }, updatedArticle)
+
+        response.status(200).json(updatedArticle)
+
+    } catch (err) {
+        if (err instanceof mongoose.Error.ValidationError) {
+            response.status(400).json({
+                error: err.message
+            });
+        } else {
+            response.status(500).json({
+                error: err.message
+            });
+        }
     }
 }
 
@@ -117,5 +178,6 @@ module.exports = {
     postArticle,
     getArticlesCount,
     getArticleById,
-    deleteArticle
+    deleteArticle,
+    putArticle
 };

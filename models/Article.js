@@ -1,26 +1,33 @@
 const mongoose = require('mongoose');
 
 const articleSchema = new mongoose.Schema({
+    id: {
+        type: Number
+    },
     featured: {
         type: Boolean
     },
     title: {
-        type: String
+        type: String,
+        required: true
     },
     url: {
-        type: String
+        type: String,
+        required: true
     },
     imageUrl: {
         type: String
     },
     newsSite: {
-        type: String
+        type: String,
+        required: true
     },
     summary: {
         type: String
     },
     publishedAt: {
-        type: String
+        type: String,
+        required: true
     },
     launches: {
         type: Array
@@ -28,6 +35,6 @@ const articleSchema = new mongoose.Schema({
     events: {
         type: Array
     },
-}, {id: false})
+})
 
 module.exports = mongoose.model("Article", articleSchema);

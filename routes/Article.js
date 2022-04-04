@@ -6,7 +6,8 @@ const {
     getArticles,
     getArticlesCount,
     getArticleById,
-    deleteArticle
+    deleteArticle,
+    putArticle
 } = require('../controllers/Article.js');
 
 router.get('/articles', async (request, response) => {
@@ -24,6 +25,11 @@ router.get('/articles/:id', async (request, response) => {
 router.post('/articles', async (request, response) => {
     await postArticle(request, response);
 })
+
+router.put('/articles', async (request, response) => {
+    await putArticle(request, response);
+})
+
 
 router.delete('/articles/:id', async (request, response) => {
     await deleteArticle(request, response);

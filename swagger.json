@@ -39,6 +39,27 @@
                     }
                 }
             },
+            "put" : {
+                "tags": ["Articles"],
+                "description": "Update an article",
+                "parameters": [{
+                    "name": "article",
+                    "in": "body",
+                    "description": "Input Model of updated article",
+                    "schema": {
+                        "$ref": "#/definitions/Article"
+                    }
+                }],
+                "produces": ["application/json"],
+                "responses": {
+                    "200": {
+                        "description": "Article updated",
+                        "schema": {
+                            "$ref": "#/definitions/Article"
+                        }
+                    }
+                }
+            },
             "post": {
                 "tags": ["Articles"],
                 "description": "Register a new Article",

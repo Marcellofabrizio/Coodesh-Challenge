@@ -9,19 +9,12 @@ const apiUrl = 'https://api.spaceflightnewsapi.net/v3'
 
 const Article = require('../models/Article.js');
 
-async function getArticlesCount() {
-
-    await axios.get(`${apiUrl}/articles/count`).then((response) => {
-        return response.data;
-    })
-
-}
-
 async function registerArticle(responseArticle) {
 
     return new Promise((resolve, reject) => {
 
         const {
+            id,
             featured,
             title,
             url,
@@ -34,6 +27,7 @@ async function registerArticle(responseArticle) {
         } = responseArticle;
 
         const article = new Article({
+            _id: id,
             featured,
             title,
             url,
