@@ -12,69 +12,74 @@ const Article = require('../models/Article.js');
 async function getArticlesCount() {
 
     await axios.get(`${apiUrl}/articles/count`).then((response) => {
-        console.log(response.data);
-    })
-
-}
-
-async function getArticles() {
-
-    await axios.get(`${apiUrl}/articles`, {
-        params: {
-            _limit: 50
-        }
-    }).then((response) => {
-        console.log(response.data);
-        response.data.forEach((article) => {
-            registerArticle(article);
-        })
+        return response.data;
     })
 
 }
 
 async function registerArticle(responseArticle) {
 
-    const {
-        id,
-        featured,
-        title,
-        url,
-        imageUrl,
-        newsSite,
-        summary,
-        publishedAt,
-        launches,
-        events
-    } = responseArticle;
+    return new Promise((resolve, reject) => {
 
-    const article = new Article({
-        id,
-        featured,
-        title,
-        url,
-        imageUrl,
-        newsSite,
-        summary,
-        publishedAt,
-        launches,
-        events
-    })
+        const {
+            id,
+            featured,
+            title,
+            url,
+            imageUrl,
+            newsSite,
+            summary,
+            publishedAt,
+            launches,
+            events
+        } = responseArticle;
 
-    try {
-        await article.save().then(() => {
-            console.log("article created")
+        const article = new Article({
+            id,
+            featured,
+            title,
+            url,
+            imageUrl,
+            newsSite,
+            summary,
+            publishedAt,
+            launches,
+            events
         })
 
-    } catch (err) {
-        console.log(err.message);
-    }
+        try {
+            article.save().then(() => {
+                console.log("article created")
+                resolve();
+            })
+
+        } catch (err) {
+            console.log(err.message);
+        }
+
+    })
+}
+
+async function register() {
+    mongoose.connect("mongodb+srv://MarcelloFabrizio:EspacialMongo@cluster0.gwwrw.mongodb.net/myFirstDatabase?retryWrites=true&w=majority",)
+    const db = mongoose.connection;
+
+    db.on('error', (error) => console.log(error));
+    db.once('open', () => console.log('Database connection established'));
+
+    const response = await axios.get(`${apiUrl}/articles`, {
+        params: {
+            _limit: 50,
+            _start: 150
+        }
+    })
+
+    await Promise.all(response.data.map(async (article) => {
+        await registerArticle(article);
+    })).then(() => {
+        db.close();
+    })
 
 }
 
-mongoose.connect("mongodb+srv://MarcelloFabrizio:EspacialMongo@cluster0.gwwrw.mongodb.net/myFirstDatabase?retryWrites=true&w=majority",)
-const db = mongoose.connection;
-
-db.on('error', (error) => console.log(error));
-db.once('open', () => console.log('Database connection established'));
-getArticles();
-
+register();
