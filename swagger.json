@@ -19,6 +19,17 @@
             "get": {
                 "tags": ["Articles"],
                 "summary": "Get all articles",
+                "parameters": [{
+                    "in": "query",
+                    "name": "limit",
+                    "type": "integer",
+                    "default": 30
+                }, {
+                    "in": "query",
+                    "name": "skip",
+                    "type": "integer",
+                    "default": 0
+                }],
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -49,13 +60,62 @@
                     }
                 }
             }
+        },
+        "/articles/{id}": {
+            "get": {
+                "tags": ["Articles"],
+                "summary": "Get article by id",
+                "parameters": [{
+                    "in": "path",
+                    "name": "id",
+                    "type": "string",
+                    "required": true
+                }],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/Article"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": ["Articles"],
+                "summary": "Delete an article by id",
+                "parameters": [{
+                    "in": "path",
+                    "name": "id",
+                    "type": "string",
+                    "required": true
+                }],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
+        "/articles/count": {
+            "get": {
+                "tags": ["Articles"],
+                "summary": "Get articles count",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/Article"
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
         "Article": {
             "properties": {
                 "_id": {
-                    "type": "integer",
+                    "type": "string",
                     "uniqueItems": true
                 },
                 "featured": {

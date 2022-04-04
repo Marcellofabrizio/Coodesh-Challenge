@@ -1,9 +1,6 @@
 const mongoose = require('mongoose');
 
 const articleSchema = new mongoose.Schema({
-    id: {
-        type: Number
-    },
     featured: {
         type: Boolean
     },
@@ -31,6 +28,6 @@ const articleSchema = new mongoose.Schema({
     events: {
         type: Array
     },
-})
+}, {id: false})
 
 module.exports = mongoose.model("Article", articleSchema);

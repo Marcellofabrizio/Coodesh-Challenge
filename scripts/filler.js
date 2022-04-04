@@ -22,7 +22,6 @@ async function registerArticle(responseArticle) {
     return new Promise((resolve, reject) => {
 
         const {
-            id,
             featured,
             title,
             url,
@@ -35,7 +34,6 @@ async function registerArticle(responseArticle) {
         } = responseArticle;
 
         const article = new Article({
-            id,
             featured,
             title,
             url,
@@ -49,7 +47,6 @@ async function registerArticle(responseArticle) {
 
         try {
             article.save().then(() => {
-                console.log("article created")
                 resolve();
             })
 
@@ -61,25 +58,39 @@ async function registerArticle(responseArticle) {
 }
 
 async function register() {
-    mongoose.connect("mongodb+srv://MarcelloFabrizio:EspacialMongo@cluster0.gwwrw.mongodb.net/myFirstDatabase?retryWrites=true&w=majority",)
+    await mongoose.connect("mongodb+srv://MarcelloFabrizio:EspacialMongo@cluster0.gwwrw.mongodb.net/myFirstDatabase?retryWrites=true&w=majority",)
     const db = mongoose.connection;
 
     db.on('error', (error) => console.log(error));
     db.once('open', () => console.log('Database connection established'));
 
-    const response = await axios.get(`${apiUrl}/articles`, {
-        params: {
-            _limit: 50,
-            _start: 150
-        }
-    })
+    await axios.get(`${apiUrl}/articles/count`).then((response) => {
+        total = response.data
+    });
+    var skip = 0;
+    const limit = 50;
 
-    await Promise.all(response.data.map(async (article) => {
-        await registerArticle(article);
-    })).then(() => {
+
+    while (skip < total) {
+        const response = await axios.get(`${apiUrl}/articles`, {
+            params: {
+                _limit: limit,
+                _start: skip
+            }
+        })
+        await Promise.all(response.data.map(async (article) => {
+            await registerArticle(article);
+        })).then(() => {
+            skip += limit;
+            console.log(skip);
+        }).finally(() => {
+
+        })
+    }
+
+    if(skip > total) {
         db.close();
-    })
-
+    }
 }
 
 register();
