@@ -1,5 +1,5 @@
-const Article = require('../models/Article.js');
 const mongoose = require('mongoose');
+const Article = require('../models/Article.js');
 
 async function getArticles(request, response) {
 
@@ -128,8 +128,6 @@ async function putArticle(request, response) {
             launches,
             events
         })
-
-        console.log(_id)
 
         await updatedArticle.validate()
 

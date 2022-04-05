@@ -4,10 +4,17 @@
 
 const axios = require('axios');
 const mongoose = require('mongoose');
+const pino = require('pino')
 
 const apiUrl = 'https://api.spaceflightnewsapi.net/v3'
 
 const Article = require('../models/Article.js');
+
+const logger = pino({
+    prettyPrint: {
+        ignore: "pid,hostname",
+    },
+}, pino.destination("articles-cron.log"));
 
 async function registerArticle(responseArticle) {
 
@@ -41,11 +48,12 @@ async function registerArticle(responseArticle) {
 
         try {
             article.save().then(() => {
+                logger.info(`Article ${id} saved successfully`)
                 resolve();
             })
 
         } catch (err) {
-            console.log(err.message);
+            logger.error(err.message);
         }
 
     })
@@ -55,8 +63,8 @@ async function register() {
     await mongoose.connect("mongodb+srv://MarcelloFabrizio:EspacialMongo@cluster0.gwwrw.mongodb.net/myFirstDatabase?retryWrites=true&w=majority",)
     const db = mongoose.connection;
 
-    db.on('error', (error) => console.log(error));
-    db.once('open', () => console.log('Database connection established'));
+    db.on('error', (error) => logger.error(error));
+    db.once('open', () => logger.info('Database connection established'));
 
     await axios.get(`${apiUrl}/articles/count`).then((response) => {
         total = response.data
@@ -76,7 +84,6 @@ async function register() {
             await registerArticle(article);
         })).then(() => {
             skip += limit;
-            console.log(skip);
         }).finally(() => {
 
         })
