@@ -135,7 +135,7 @@
     "definitions": {
         "Article": {
             "properties": {
-                "_id": {
+                "id": {
                     "type": "string",
                     "uniqueItems": true
                 },

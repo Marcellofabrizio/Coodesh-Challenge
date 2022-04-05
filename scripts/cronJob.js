@@ -66,7 +66,7 @@ async function getRegisteredArticlesCount() {
 
 }
 
-async function cronJob() {
+async function syncArticles() {
     await mongoose.connect("mongodb+srv://MarcelloFabrizio:EspacialMongo@cluster0.gwwrw.mongodb.net/myFirstDatabase?retryWrites=true&w=majority",)
 
     var total = 0;
@@ -103,4 +103,4 @@ async function cronJob() {
     }
 }
 
-module.exports = { cronJob }
+module.exports = { syncArticles }

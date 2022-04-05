@@ -35,6 +35,15 @@ async function getArticleById(request, response) {
     const id = request.params.id;
 
     try {
+        
+        if(!mongoose.Types.ObjectId.isValid(id)) {
+            response.status(400).json({
+                error: 'Bad Request',
+                message: 'Invalid Id'
+            });
+            return;
+        }
+
         const article = await Article.findById(id);
 
         if (article == null) {
@@ -46,6 +55,7 @@ async function getArticleById(request, response) {
         response.status(200).json(article)
 
     } catch (err) {
+        console.error(err)
         response.status(500).json({
             error: err
         })
@@ -128,6 +138,8 @@ async function putArticle(request, response) {
             launches,
             events
         })
+
+        mongoose.Types.ObjectId.isValid(_id)
 
         await updatedArticle.validate()
 

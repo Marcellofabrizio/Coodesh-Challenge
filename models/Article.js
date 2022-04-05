@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 const articleSchema = new mongoose.Schema({
     id: {
-        type: Number
+        type: String
     },
     featured: {
         type: Boolean
