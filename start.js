@@ -5,7 +5,7 @@ const { logger } = require('./utils/logger.js');
 
 const PORT = process.env.PORT || 3000;
 
-mongoose.connect("mongodb+srv://MarcelloFabrizio:EspacialMongo@cluster0.gwwrw.mongodb.net/testDatabase?retryWrites=true&w=majority",)
+mongoose.connect("mongodb+srv://MarcelloFabrizio:EspacialMongo@cluster0.gwwrw.mongodb.net/myFirstDatabase?retryWrites=true&w=majority",)
 const db = mongoose.connection;
 
 db.on('error', (error) => logger.error(error));

@@ -2,7 +2,7 @@
     "swagger": "2.0",
     "info": {
         "version": "1.0.0",
-        "title": "Spaceflight News Articles API",
+        "title": "Coodesh Challenge Spaceflight News Articles API",
         "description": "Coodesh Back-End Challenge 2021"
     },
     "host": "localhost:3000",
