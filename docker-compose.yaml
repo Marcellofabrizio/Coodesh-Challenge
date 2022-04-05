@@ -1,8 +1,10 @@
 version: "3.3"
 services:
-  web:
-    build: .
+  api:
     ports:
       - "3000:3000"
-  live-reload:
     image: "marcellofabrizio/coodesh_challenge"
+    env_file:
+      - .env
+    volumes:
+      - /usr/src/app/

@@ -32,8 +32,16 @@ O projeto seguiu os requisitos levantados pelo enunciado do problema. Deveria se
 
 ## Instalação
 
+A instalação dos pacotes deve ser feita pelo comando
+
+`npm install`
+
 Como a aplicação foi virtualizada em um docker, basta executar o comando 
-<br>
+
 `docker-compose up`
-<br>
-Assim, a aplicação estará rodando no localhost
+
+Assim, a aplicação estará rodando no localhost.
+
+Para o script sincronizador de arquivos, se deve rodar o comando
+
+`npm run cron`
