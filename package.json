@@ -4,29 +4,27 @@
   "description": "Space Flight News REST API ",
   "main": "index.js",
   "jest": {
-    "testEnviroment": "node"
+    "testEnvironment": "node"
   },
   "scripts": {
     "start": "node ./start.js",
+    "cron": "node ./scripts/cronJob.js",
     "dev": "nodemon ./start.js",
     "test": "LOG_DISABLED=true NODE_OPTIONS=--experimental-vm-modules jest --no-cache",
     "test:watch": "LOG_DISABLED=true NODE_OPTIONS=--experimental-vm-modules jest --no-cache --watchAll",
     "test:coverage": "LOG_DISABLED=true NODE_OPTIONS=--experimental-vm-modules jest --no-cache --coverage __tests__"
   },
   "author": "Marcello Fabrizio",
-  "license": "ISC",
   "dependencies": {
     "axios": "^0.26.1",
     "express": "^4.17.3",
     "got": "^12.0.3",
-    "mongodb": "^4.4.1",
     "mongoose": "^6.2.9",
     "node-cron": "^3.0.0",
     "pino": "^7.9.2",
     "pino-pretty": "^7.6.0",
     "swagger-jsdoc": "^6.2.0",
-    "swagger-ui-express": "^4.3.0",
-    "uuid": "^8.3.2"
+    "swagger-ui-express": "^4.3.0"
   },
   "devDependencies": {
     "jest": "^27.5.1",

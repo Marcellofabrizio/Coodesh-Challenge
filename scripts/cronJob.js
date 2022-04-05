@@ -1,6 +1,7 @@
 const axios = require('axios');
 const mongoose = require('mongoose');
 const pino = require('pino')
+const cron = require('node-cron');
 
 const apiUrl = 'https://api.spaceflightnewsapi.net/v3'
 
@@ -103,4 +104,7 @@ async function syncArticles() {
     }
 }
 
-module.exports = { syncArticles }
+// Cron scheduled to execute the syncronization every day at 9 am
+cron.schedule("0 9 * * *", () => {
+    syncArticles()
+});

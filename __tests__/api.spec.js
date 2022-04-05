@@ -1,16 +1,14 @@
 const {
     expect,
     describe,
-    test,
-    beforeEach,
-    done
+    test
 } = require('@jest/globals');
 
 const superTest = require('supertest')
 const { mongoose } = require('mongoose')
 
 const { app } = require('../server/index.js')
-const { Article } = require('../models/Article.js');
+const Article = require('../models/Article.js');
 
 const request = superTest(app)
 
@@ -18,6 +16,11 @@ describe("Articles API Test Suite", () => {
 
     beforeAll(async () => {
         await mongoose.connect("mongodb+srv://MarcelloFabrizio:EspacialMongo@cluster0.gwwrw.mongodb.net/testDatabase?retryWrites=true&w=majority")
+    })
+
+    afterAll(async () => {
+        Article.deleteMany()
+        mongoose.connection.close()
     })
 
     // Closing the DB connection allows Jest to exit successfully.
@@ -95,12 +98,85 @@ describe("Articles API Test Suite", () => {
     test("GET /articles/{id} - it should return status 400 if article is not found", async () => {
         const expectedStatus = 400
 
-        //Generates new random ObjectId
         const mockId = mongoose.Types.ObjectId().toString()
 
         const response = await request.get(`/articles/${mockId}`)
 
         expect(response.status).toBe(expectedStatus);
+    })
+
+    test("PUT /articles - it should return the edited article", async () => {
+        const newArticle =
+        {
+            "featured": false,
+            "title": "York Space to triple satellite production to meet military and commercial demand",
+            "url": "https://spacenews.com/york-space-to-triple-satellite-production-to-meet-military-and-commercial-demand/",
+            "imageUrl": "https://spacenews.com/wp-content/uploads/2022/04/MG_8616.jpg",
+            "newsSite": "SpaceNews",
+            "summary": "",
+            "publishedAt": "2022-04-05T13:09:40.000Z",
+            "launches": [],
+            "events": []
+        }
+
+        const postResponse = await request.post("/articles").send(newArticle)
+
+        const editedArticle =
+        {
+            "_id": postResponse.body._id,
+            "featured": true,
+            "title": "York Space to triple satellite production to meet military and commercial demand",
+            "url": "https://spacenews.com/york-space-to-triple-satellite-production-to-meet-military-and-commercial-demand/",
+            "imageUrl": "https://spacenews.com/wp-content/uploads/2022/04/MG_8616.jpg",
+            "newsSite": "SpaceNews",
+            "summary": "This is an edited summary",
+            "publishedAt": "2022-04-05T13:09:40.000Z",
+            "launches": [],
+            "events": []
+        }
+
+        const response = await request.put("/articles").send(editedArticle)
+
+        expect(response.body.summary).toEqual(editedArticle.summary)
+
+    })
+
+    test("PUT /articles - it should return status 400 if article to edit is not found", async () => {
+
+        const expectedStatus = 400
+
+        const newArticle =
+        {
+            "featured": false,
+            "title": "York Space to triple satellite production to meet military and commercial demand",
+            "url": "https://spacenews.com/york-space-to-triple-satellite-production-to-meet-military-and-commercial-demand/",
+            "imageUrl": "https://spacenews.com/wp-content/uploads/2022/04/MG_8616.jpg",
+            "newsSite": "SpaceNews",
+            "summary": "",
+            "publishedAt": "2022-04-05T13:09:40.000Z",
+            "launches": [],
+            "events": []
+        }
+
+        await request.post("/articles").send(newArticle)
+
+        const editedArticle =
+        {
+            "featured": true,
+            "title": "York Space to triple satellite production to meet military and commercial demand",
+            "url": "https://spacenews.com/york-space-to-triple-satellite-production-to-meet-military-and-commercial-demand/",
+            "imageUrl": "https://spacenews.com/wp-content/uploads/2022/04/MG_8616.jpg",
+            "newsSite": "SpaceNews",
+            "summary": "This is an edited summary",
+            "publishedAt": "2022-04-05T13:09:40.000Z",
+            "launches": [],
+            "events": []
+        }
+
+        const response = await request.put("/articles").send(editedArticle)
+
+        expect(response.status).toEqual(expectedStatus)
+
     })
 
 })

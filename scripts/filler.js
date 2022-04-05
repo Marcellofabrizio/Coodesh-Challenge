@@ -34,7 +34,6 @@ async function registerArticle(responseArticle) {
         } = responseArticle;
 
         const article = new Article({
-            _id: id,
             featured,
             title,
             url,
@@ -48,7 +47,7 @@ async function registerArticle(responseArticle) {
 
         try {
             article.save().then(() => {
-                logger.info(`Article ${id} saved successfully`)
+                logger.info(`Article ${article.id} saved successfully`)
                 resolve();
             })
 
@@ -84,8 +83,7 @@ async function register() {
             await registerArticle(article);
         })).then(() => {
             skip += limit;
-        }).finally(() => {
-
+            console.log(skip);
         })
     }
 
