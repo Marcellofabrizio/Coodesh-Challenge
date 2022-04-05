@@ -83,7 +83,6 @@ async function register() {
             await registerArticle(article);
         })).then(() => {
             skip += limit;
-            console.log(skip);
         })
     }
 

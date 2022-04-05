@@ -55,7 +55,6 @@ async function getArticleById(request, response) {
         response.status(200).json(article)
 
     } catch (err) {
-        console.error(err)
         response.status(500).json({
             error: err
         })
@@ -139,7 +138,13 @@ async function putArticle(request, response) {
             events
         })
 
-        mongoose.Types.ObjectId.isValid(_id)
+        if (!mongoose.Types.ObjectId.isValid(_id)) {
+            response.status(400).json({
+                error: 'Bad Request',
+                message: 'Invalid Id'
+            });
+            return;
+        }
 
         await article.validate()
 
@@ -171,6 +176,14 @@ async function deleteArticle(request, response) {
     const id = request.params.id;
 
     try {
+        if (!mongoose.Types.ObjectId.isValid(id)) {
+            response.status(400).json({
+                error: 'Bad Request',
+                message: 'Invalid Id'
+            });
+            return;
+        }
+
         const article = await Article.findByIdAndRemove(id);
 
         if (article == null) {
@@ -185,8 +198,8 @@ async function deleteArticle(request, response) {
 
     } catch (err) {
         response.status(500).json({
-            error: err
-        })
+            error: err.message
+        });
     }
 }
 
