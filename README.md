@@ -36,7 +36,7 @@ A instalação dos pacotes deve ser feita pelo comando
 
 `npm install`
 
-Como a aplicação foi virtualizada em um docker, basta executar o comando 
+Como a aplicação foi virtualizada com Docker, basta executar o comando 
 
 `docker-compose up`
 
